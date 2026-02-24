@@ -4,7 +4,12 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseAnonKey) {
-  console.warn('Supabase environment variables not set. Database operations will fail.');
+  const message = 'Supabase environment variables not set. Database operations will fail.';
+  console.warn(message);
+  // Only throw in production runtime, not during build
+  if (process.env.NODE_ENV === 'production' && process.env.NEXT_PHASE !== 'phase-production-build') {
+    throw new Error(message);
+  }
 }
 
 export const supabase = createClient(

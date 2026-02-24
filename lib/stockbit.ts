@@ -38,7 +38,7 @@ async function loginStockbit(): Promise<LoginTokenData> {
   const playerId = process.env.STOCKBIT_PLAYER_ID;
 
   if (!username || !password || !playerId) {
-    throw new TokenExpiredError('Missing STOCKBIT_USERNAME, STOCKBIT_PASSWORD, or STOCKBIT_PLAYER_ID environment variables');
+    throw new TokenExpiredError('Missing STOCKBIT_USERNAME, STOCKBIT_PASSWORD, or STOCKBIT_PLAYER_ID environment variables. Please ensure these are correctly configured.');
   }
 
   // Add delay before login request
@@ -176,7 +176,7 @@ async function handleApiResponse(response: Response, apiName: string): Promise<v
   if (response.status === 401) {
     // Don't clear cache here - let the retry logic handle it
     console.log(`[Stockbit] ${apiName} returned 401, will trigger token refresh`);
-    throw new TokenExpiredError(`${apiName}: Authentication failed (401)`);
+    throw new TokenExpiredError(`${apiName}: Authentication failed (401). Please check STOCKBIT_USERNAME, STOCKBIT_PASSWORD, and STOCKBIT_PLAYER_ID environment variables.`);
   }
   
   if (!response.ok) {
