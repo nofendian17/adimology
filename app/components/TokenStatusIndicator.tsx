@@ -132,19 +132,11 @@ export default function TokenStatusIndicator() {
           )}
 
           <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--border-color)' }}>
-            <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', lineHeight: '1.4', marginBottom: '0.75rem' }}>
+            <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', lineHeight: '1.4' }}>
               {isError
-                ? 'Token has expired or is invalid. Please login to Stockbit via the extension to refresh.'
-                : 'Connection is active. Token will be automatically refreshed by the extension.'}
+                ? 'Auto-login credentials not configured. Please set STOCKBIT_USERNAME and STOCKBIT_PASSWORD environment variables.'
+                : 'Connection is active. Tokens are automatically fetched using configured credentials.'}
             </p>
-            <a
-              href="https://stockbit.com/login"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="token-action-btn"
-            >
-              {isError ? 'Login to Stockbit' : 'Open Stockbit'}
-            </a>
           </div>
         </div>
       )}

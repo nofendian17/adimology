@@ -60,6 +60,7 @@ export async function GET(request: NextRequest) {
     }
 
     // If no cache exists, auto-sync from Stockbit (first time)
+    console.log('[Watchlist API] No cache found or no groupId provided, fetching from Stockbit...');
     return await fetchFromStockbitAndCache(numericGroupId);
 
   } catch (error) {
@@ -96,15 +97,24 @@ export async function GET(request: NextRequest) {
  * Fetch from Stockbit API, enrich with sector info, save to cache, and return
  */
 async function fetchFromStockbitAndCache(groupId?: number) {
+  console.log(`[Watchlist API] Fetching from Stockbit for groupId: ${groupId || 'default'}`);
+  
   const watchlistData = await fetchWatchlist(groupId);
   const items = watchlistData.data?.result || [];
+  
+  console.log(`[Watchlist API] Fetched ${items.length} items from Stockbit`);
 
   if (items.length === 0) {
+    console.log('[Watchlist API] Watchlist is empty, returning without caching');
     return NextResponse.json({
       success: true,
       data: watchlistData,
       source: 'stockbit',
       synced_at: new Date().toISOString(),
+    }, {
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate',
+      }
     });
   }
 
@@ -191,6 +201,10 @@ async function fetchFromStockbitAndCache(groupId?: number) {
     data: updatedData,
     source: 'stockbit',
     synced_at: new Date().toISOString(),
+  }, {
+    headers: {
+      'Cache-Control': 'no-store, no-cache, must-revalidate',
+    }
   });
 }
 
