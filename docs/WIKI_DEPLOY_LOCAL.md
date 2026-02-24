@@ -43,6 +43,9 @@ Ikuti langkah-langkah berikut secara berurutan:
    NEXT_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co
    NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
    GEMINI_API_KEY=AIzaSy...
+   STOCKBIT_USERNAME=your_stockbit_username
+   STOCKBIT_PASSWORD=your_stockbit_password
+   STOCKBIT_PLAYER_ID=your_player_id
    ```
 
    | Variable | Nilai | Wajib |
@@ -50,7 +53,16 @@ Ikuti langkah-langkah berikut secara berurutan:
    | `NEXT_PUBLIC_SUPABASE_URL` | URL dari Supabase | ✅ |
    | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Anon key dari Supabase | ✅ |
    | `GEMINI_API_KEY` | API Key dari [Google AI Studio](https://aistudio.google.com/) | ✅ |
-   | `STOCKBIT_JWT_TOKEN` | Token manual (opsional, ekstensi lebih baik) | ❌ |
+   | `STOCKBIT_USERNAME` | Username akun Stockbit Anda | ✅ |
+   | `STOCKBIT_PASSWORD` | Password akun Stockbit Anda | ✅ |
+   | `STOCKBIT_PLAYER_ID` | Player ID dari Stockbit* | ✅ |
+
+   \* **Cara mendapatkan STOCKBIT_PLAYER_ID**:
+   1. Login ke [Stockbit](https://stockbit.com/) di browser
+   2. Buka Developer Tools (F12) → Application/Storage → **Cookies** → https://stockbit.com
+   3. Cari cookie dengan nama `player_id` dan copy value-nya
+
+   **Catatan**: `STOCKBIT_USERNAME`, `STOCKBIT_PASSWORD`, dan `STOCKBIT_PLAYER_ID` **wajib** diisi untuk auto-login. Tidak lagi memerlukan Chrome Extension.
 
 ## B3. Jalankan Aplikasi
 
@@ -81,39 +93,12 @@ Fitur analisis AI (Story Analysis) menggunakan Netlify Functions. Untuk menjalan
 
    > **Note**: Biarkan terminal ini tetap berjalan berdampingan dengan terminal aplikasi utama (`npm run dev`).
 
-## B4. Setup Chrome Extension (untuk Lokal)
-
-1. Buka folder `stockbit-token-extension/` di repository
-2. Salin file konfigurasi:
-   ```bash
-   cp stockbit-token-extension/manifest.json.example stockbit-token-extension/manifest.json
-   cp stockbit-token-extension/background.js.example stockbit-token-extension/background.js
-   ```
-
-3. Edit `manifest.json` - konfigurasi untuk localhost:
-   ```json
-   "host_permissions": [
-      "https://*.stockbit.com/*",
-      "http://localhost:3000/*"
-   ]
-   ```
-
-4. Edit `background.js` - set `APP_API_URL` ke localhost:
-   ```javascript
-   const APP_API_URL = "http://localhost:3000/api/update-token";
-   ```
-
-5. Install ekstensi di Chrome:
-   - Buka `chrome://extensions/`
-   - Aktifkan **Developer mode** (pojok kanan atas)
-   - Klik **Load unpacked**
-   - Pilih folder `stockbit-token-extension`
-
-## B5. Verifikasi Instalasi
+## B4. Verifikasi Instalasi
 
 1. Pastikan aplikasi berjalan (`npm run dev`)
-2. Buka [Stockbit](https://stockbit.com/) dan login
-3. Ekstensi akan otomatis menangkap dan mengirim token ke Supabase
-4. Buka [http://localhost:3000](http://localhost:3000)
-5. Cek indikator koneksi Stockbit - harus menunjukkan **Connected**
-6. Coba analisis saham pertama Anda! 🎉
+2. Buka [http://localhost:3000](http://localhost:3000)
+3. Cek indikator koneksi Stockbit - harus menunjukkan **Connected**
+4. Jika status **Disconnected**, periksa environment variables `STOCKBIT_USERNAME`, `STOCKBIT_PASSWORD`, dan `STOCKBIT_PLAYER_ID` sudah benar
+5. Coba analisis saham pertama Anda! 🎉
+
+**Catatan**: Aplikasi sekarang menggunakan auto-login, tidak perlu lagi install Chrome Extension.

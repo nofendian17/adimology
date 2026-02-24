@@ -1,10 +1,10 @@
 # Adimology - Kalkulator Target Saham
 
 > [!CAUTION]
-> **PERINGATAN KEAMANAN**: Jangan pernah membagikan URL aplikasi Netlify Anda secara publik. Aplikasi ini melakukan sinkronisasi token sesi Stockbit Anda ke database. Jika URL bocor, orang lain dapat menyalahgunakan akses tersebut. Meski begitu, aplikasi ini tetap tidak bisa melakukan transaksi karena tidak bisa mengakses fitur PIN. Gunakan aplikasi ini hanya untuk penggunaan pribadi.
+> **PERINGATAN KEAMANAN**: Jangan pernah membagikan URL aplikasi Netlify Anda secara publik. Aplikasi ini menggunakan kredensial Stockbit Anda untuk auto-login. Jika URL bocor, orang lain dapat menyalahgunakan akses tersebut. Meski begitu, aplikasi ini tetap tidak bisa melakukan transaksi karena tidak bisa mengakses fitur PIN. Gunakan aplikasi ini hanya untuk penggunaan pribadi.
 
 > [!IMPORTANT]
-> **DISCLAIMER & TANGGUNG JAWAB**: Dengan menginstal dan menggunakan aplikasi ini, Anda menyatakan sadar dan setuju bahwa aplikasi ini akan menggunakan token sesi Stockbit Anda untuk keperluan sinkronisasi data. Pengguna memahami sepenuhnya cara kerja aplikasi ini dan membebaskan pengembang dari segala tuntutan hukum atau kerugian yang mungkin timbul. Pengembang tidak bertanggung jawab atas penyalahgunaan akses jika URL aplikasi Anda diketahui oleh pihak lain.
+> **DISCLAIMER & TANGGUNG JAWAB**: Dengan menginstal dan menggunakan aplikasi ini, Anda menyatakan sadar dan setuju bahwa aplikasi ini akan menggunakan kredensial Stockbit Anda (username, password, player_id) untuk auto-login dan mengambil data. Pengguna memahami sepenuhnya cara kerja aplikasi ini dan membebaskan pengembang dari segala tuntutan hukum atau kerugian yang mungkin timbul. Pengembang tidak bertanggung jawab atas penyalahgunaan akses jika URL aplikasi Anda diketahui oleh pihak lain.
 
 ![Adimology Preview 1](public/adimology01.PNG)
 
@@ -15,6 +15,13 @@
 ---
 
 ## Changelog
+
+### v0.5.0 (2026-02-25)
+- **Auto-Login Stockbit**: Implementasi auto-login menggunakan environment variables (`STOCKBIT_USERNAME`, `STOCKBIT_PASSWORD`, `STOCKBIT_PLAYER_ID`).
+- **Token Refresh Otomatis**: Sistem refresh token otomatis dengan fallback ke full login jika refresh gagal.
+- **Rate Limiting**: Penambahan delay 300ms pada semua API call untuk mencegah rate limiting.
+- **Hapus Chrome Extension**: Tidak lagi memerlukan Chrome Extension untuk sinkronisasi token.
+- **Cleanup Database**: Menghapus tabel session dan migrasi terkait token management.
 
 ### v0.4.1 (2026-02-24)
 - **Security Hardening**: Implementasi global API protection menggunakan **Next.js 16 Proxy**.
@@ -134,7 +141,11 @@ Opsi ini cocok untuk pengembangan atau jika Anda hanya ingin menjalankan aplikas
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | ✅ | ✅ | Anon key Supabase |
 | `CRON_SECRET` | ✅ | ❌ | Secret untuk scheduled functions |
 | `GEMINI_API_KEY` | ✅ | ✅ | API Key Google AI Studio |
-| `STOCKBIT_JWT_TOKEN` | ❌ | ⚠️ | Fallback token manual |
+| `STOCKBIT_USERNAME` | ✅ | ✅ | Username akun Stockbit |
+| `STOCKBIT_PASSWORD` | ✅ | ✅ | Password akun Stockbit |
+| `STOCKBIT_PLAYER_ID` | ✅ | ✅ | Player ID dari Stockbit (lihat di Local Storage) |
+
+**Catatan**: `STOCKBIT_USERNAME`, `STOCKBIT_PASSWORD`, dan `STOCKBIT_PLAYER_ID` **wajib** diisi untuk auto-login. Tidak lagi memerlukan Chrome Extension.
 
 ---
 

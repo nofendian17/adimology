@@ -39,49 +39,28 @@ Agar migrasi otomatis dapat berjalan, Anda perlu menyiapkan infrastruktur pelaca
    | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Anon key dari Supabase langkah A1 no 3| ✅ |
    | `CRON_SECRET` | String acak untuk keamanan cron | ✅ |
    | `GEMINI_API_KEY` | API Key dari [Google AI Studio](https://aistudio.google.com/) | ✅ |
+   | `STOCKBIT_USERNAME` | Username akun Stockbit Anda | ✅ |
+   | `STOCKBIT_PASSWORD` | Password akun Stockbit Anda | ✅ |
+   | `STOCKBIT_PLAYER_ID` | Player ID dari Stockbit* | ✅ |
+
+   \* **Cara mendapatkan STOCKBIT_PLAYER_ID**:
+   1. Login ke [Stockbit](https://stockbit.com/) di browser
+   2. Buka Developer Tools (F12) → Application/Storage → **Cookies** → https://stockbit.com
+   3. Cari cookie dengan nama `player_id` dan copy value-nya
 
 7. Klik **Deploy site** dan tunggu hingga selesai
 8. Catat URL Netlify Anda (contoh: `https://your-app.netlify.app`) akan digunakan untuk proses berikutnya 
 
-## A3. Setup Chrome Extension (untuk Cloud)
+## A3. Verifikasi Instalasi
 
-1. **Download File ke Komputer**: Jika Anda belum memiliki file ini di komputer, buka repository GitHub Anda, klik tombol **Code** (warna hijau), lalu pilih **Download ZIP**. Ekstrak (Extract) file tersebut ke folder pilihan Anda (misal di Desktop atau Documents).
-![Supabase Setup](https://raw.githubusercontent.com/bhaktiutama/adimology/main/public/chrome-extension01.png)
-2. Buka folder `stockbit-token-extension/` yang ada di dalam folder hasil ekstrak tadi.
-3. Buat duplikat (Copy & Paste) untuk dua file berikut:
-   - Duplikat `manifest.json.example` lalu ubah namanya menjadi `manifest.json`
-   - Duplikat `background.js.example` lalu ubah namanya menjadi `background.js`
-![Supabase Setup](https://raw.githubusercontent.com/bhaktiutama/adimology/main/public/chrome-extension02.png)
+1. Buka URL Netlify Anda
+2. Cek indikator koneksi Stockbit di aplikasi - harus menunjukkan **Connected**
+3. Jika status **Disconnected**, periksa environment variables `STOCKBIT_USERNAME`, `STOCKBIT_PASSWORD`, dan `STOCKBIT_PLAYER_ID` sudah benar
+4. Coba analisis saham pertama Anda! 🎉
 
-4. Edit `manifest.json` - ganti `YOUR_APP_DOMAIN` dengan URL Netlify Anda dari langkah A2 no 8:
-   ```json
-   "host_permissions": [
-      "https://*.stockbit.com/*",
-      "https://your-app.netlify.app/*"
-   ]
-   ```
+**Catatan**: Aplikasi sekarang menggunakan auto-login, tidak perlu lagi install Chrome Extension.
 
-5. Edit `background.js` - ganti `APP_API_URL` dengan URL Netlify Anda:
-   ```javascript
-   const APP_API_URL = "https://your-app.netlify.app/api/update-token";
-   ```
-
-6. Install ekstensi di Chrome:
-   - Buka `chrome://extensions/`
-   - Aktifkan **Developer mode** (pojok kanan atas)
-   - Klik **Load unpacked**
-   - Pilih folder `stockbit-token-extension`
-![Supabase Setup](https://raw.githubusercontent.com/bhaktiutama/adimology/main/public/chrome-extension03.png)
-
-## A4. Verifikasi Instalasi
-
-1. Buka [Stockbit](https://stockbit.com/) dan login
-2. Ekstensi akan otomatis menangkap dan mengirim token ke Supabase
-3. Buka URL Netlify Anda
-4. Cek indikator koneksi Stockbit di aplikasi - harus menunjukkan **Connected**
-5. Coba analisis saham pertama Anda! 🎉
-
-## A5. Checkpoint Troubleshooting Koneksi
+## A4. Checkpoint Troubleshooting Koneksi
 
 Jika status di aplikasi masih **"Disconnected"** atau Token invalid, silakan lakukan [pemeriksaan poin-poin berikut](https://github.com/bhaktiutama/adimology/wiki/Checkpoint).
 
